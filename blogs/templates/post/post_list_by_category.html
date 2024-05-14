@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Список постов{% endblock title %}
+{% block header %}Список постов{% endblock header %}
+
+{% block content %}
+
+
+{% for post in post_list %}
+
+  <div class="card" style="width: 18rem;">
+    <a scope="row">{{forloop.counter}}</a>
+
+    <img src="{{ post.featured_image.url }}" class="card-img-top" >
+    <div class="card-body">
+      <h5 class="card-title">{{post.name}}</h5>
+      <p class="card-text">{{post.description}}</p>
+      <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Посмотреть</a>
+    </div>
+  </div>
+  
+  {% endfor %}
+
+  {% include "includes/pagination.html" %}
+
+{% endblock content %}

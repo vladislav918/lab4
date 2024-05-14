@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Список постов{% endblock title %}
+{% block header %}Список постов{% endblock header %}
+
+{% block content %}
+<ul>
+  {% for tag in tags %}
+    <li><a href="{% url 'tag' tag.slug %}">{{ tag.name }}</a></li>
+  {% endfor %}
+</ul>
+<a href="{% url 'post_new' %}">Создать пост</a>
+
+<div class="container">
+  <div class="row">
+      {% for post in post_list %}
+          <div class="col-md-4">
+              <div class="card" style="width: 18rem;">
+                  <a scope="row">{{forloop.counter}}</a>
+
+                  <img src="{{ post.featured_image.url }}" class="card-img-top">
+                  <div class="card-body uniform-card-body">
+                      <a>Категория: {{post.category}}</a>
+                      <h5 class="card-title">{{post.name}}</h5>
+                      <p class="card-text">{{post.description}}</p>
+
+                      <p>Теги:</p>
+                      <ul class="list-group">
+                          {% for tag in post.tag.all %}
+                          <li class="list-group-item"><a>{{ tag.name }}</a></li>
+                          {% empty %}
+                              <li>Нет тегов</li>
+                          {% endfor %}
+                      </ul>  
+
+                      <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Посмотреть</a>
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+  </div>
+</div>
+
+{% include "includes/pagination.html" %}
+
+{% endblock content %}
