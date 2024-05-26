@@ -129,3 +129,63 @@ from .forms import PostForm, CommentForm, PostUpdateForm
 
 # def handle_404(request, exception):
 #     return render(request, '404.html', status=404)
+
+
+from.models import Post, Comment
+from.serializers import PostSerializer, CommentSerializer, PostCreateSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
+from .filters import PostFilter
+from rest_framework import serializers
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.generics import CreateAPIView
+
+
+class PostList(ListAPIView):
+    serializer_class = PostSerializer
+    filterset_class = PostFilter
+
+    def get_queryset(self):
+        queryset = Post.objects.all()
+        username = self.request.query_params.get('username', None)
+        if username is not None:
+            queryset = queryset.filter(author__username=username)
+        
+        print(queryset)  
+        
+        return queryset
+
+
+
+@api_view(['GET'])
+def post_comments(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return Response({'error': 'Post not found'}, status=404)
+
+    comments = Comment.objects.filter(post=post)
+    serializer = CommentSerializer(comments, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['POST'])
+def create_post(request):
+    serializer = PostCreateSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   
+
+class PostCreate(CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostCreateSerializer
+    
+    
+
+
+#'{"name": "My New Post", "description": "This is my first post.", "author": 1, "tag": [1, 2], "category": 1}'
