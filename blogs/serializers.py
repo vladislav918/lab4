@@ -56,6 +56,5 @@ class PostCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        exclude = ['featured_image', 'slug']
-   
+        exclude = ['featured_image', 'slug'] 
 
