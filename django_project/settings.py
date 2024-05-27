@@ -54,9 +54,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     'django_ckeditor_5',
     "debug_toolbar",
-    'rest_framework',
-    'django_filters',
-    'drf_spectacular',
 
     "articles",
     "blogs",
@@ -247,15 +244,3 @@ CKEDITOR_5_CONFIGS = {
 LOGIN_REDIRECT_URL = 'post_list'
 LOGOUT_REDIRECT_URL = 'post_list'
 LOGIN_URL = 'login'
-
-
-REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-SPECTACULAR_SETTINGS = {
-    "TITLE": "TEST API",
-    "DESCRIPTION": "my description",
-    "VERSION": "1.0.0",
-}
